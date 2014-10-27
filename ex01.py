@@ -7,6 +7,7 @@ Examen n°1 : Intervalles de confiance et méthodes gloutonnes
 """
 import statsmodels.api as sm
 import numpy as np
+import scipy.stats as sp
 import sklearn as sk
 import sklearn.linear_model as LinearModel
 import pandas as pd
@@ -32,9 +33,10 @@ y = data[columns_name[0]] # y contient les valeurs de l'Ozone
 X = data[columns_name[1:]]
 
 # Centrer et réduire les données
-y = (y )/ np.sqrt(np.var(y))
-X = (X ) /np.sqrt(np.var(X))
+y = (y) / np.sqrt(np.var(y))
+X = (X) / np.sqrt(np.var(X))
 
+X = sm.add_constant(X)
 
 # Question 3
 
@@ -61,4 +63,9 @@ print noise_estimation
 
 # Question 6
 
+a = sp.t(X.shape[0] - np.linalg.matrix_rank(X) - 1).ppf(0.05)
+b = sp.t(X.shape[0] - np.linalg.matrix_rank(X) - 1).ppf(0.95)
 
+
+# Question 7 
+pred = np.array([1,197,10,70,3,1 ])
