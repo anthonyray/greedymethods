@@ -56,7 +56,7 @@ clf.fit(X, y)
 print clf.alpha_
 
 # Question 5
-result = y - np.dot(X,MCO.coef_)
+result = y - np.dot(X,MCO.coef_) - MCO.intercept_
 noise_estimation = (1.0 / (X.shape[0] - np.linalg.matrix_rank(X))) * (np.linalg.norm(result))**2
 
 print noise_estimation
@@ -65,6 +65,14 @@ print noise_estimation
 
 a = sp.t(X.shape[0] - np.linalg.matrix_rank(X) - 1).ppf(0.05)
 b = sp.t(X.shape[0] - np.linalg.matrix_rank(X) - 1).ppf(0.95)
+
+inverse = np.linalg.inv(np.dot(X.T,X))
+theta_hat = clf.coef_
+Z = np.zeros(X.shape[1],1)
+sigma = noise_estimation
+
+for i in range(Z.shape[0]):
+    Z[i,0] = theta_hat[i] / (np.sqrt( inverse[i,i]  ))
 
 
 # Question 7 
@@ -113,7 +121,7 @@ def stepforward(X,y,M):
             pds = np.abs(np.vdot(X[:,idx],r))
             alphas.append([idx,pds])
         alphas = np.array(alphas)
-        i_max = alphas[np.argmax(alphas[:,1],0)]
+        i_max = alphas[np.argmax(alphas[:,1]),0]
         S.append(i_max)
         # Construction de Xs
         Xs = np.zeros(X.shape)
@@ -126,7 +134,7 @@ def stepforward(X,y,M):
     
     return theta_S,S
             
-
-stepforward(X,y,3)
-            
+print stepforward(X,y,3)
+print stepforward(X,y,4)
+print stepforward(X,y,5)            
         
