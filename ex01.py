@@ -69,3 +69,64 @@ b = sp.t(X.shape[0] - np.linalg.matrix_rank(X) - 1).ppf(0.95)
 
 # Question 7 
 pred = np.array([1,197,10,70,3,1 ])
+
+"""
+Exercice n°2
+"""
+
+def stpforward(Y,X,M):
+    theta = np.zeros((X.shape[0],1)) 
+    r = Y 
+    i = 0 
+    S = list()
+    columns = X.columns
+    interval = X.columns
+    X = X / np.sqrt(np.var(X)) # Normalisation des colonnes de X
+    while i < M:
+        alphas = list()        
+        for col,i in enumerate(interval):
+            pds = np.abs(np.vdot(X[interval[i]],r))
+            alphas.append(pds)
+        i_max = np.argmax(np.array(alphas))
+        S.append(i_max)
+        interval = np.delete(interval,i_max)
+        # Déterminer Xs
+        Xs = np.zeros(X.shape)
+        
+        theta_s = np.dot(np.linalg.pinv(Xs),Y)
+        r = Y - np.dot(X,)
+    
+    return X
+            
+        
+def stepforward(X,y,M):
+    X = np.array(X)    
+    theta = np.zeros((X.shape[1],1))        
+    r = y
+    i = 0
+    S = list()
+    interval = range(X.shape[1])
+    X = X / np.sqrt(np.var(X))
+    while i<M:
+        alphas = list()
+        for idx in interval:
+            pds = np.abs(np.vdot(X[:,idx],r))
+            alphas.append([idx,pds])
+        alphas = np.array(alphas)
+        i_max = alphas[np.argmax(alphas[:,1],0)]
+        S.append(i_max)
+        # Construction de Xs
+        Xs = np.zeros(X.shape)
+        for index in range(X.shape[1]):
+            if index in S:
+                Xs[:,index] = X[:,index]
+        theta_S = np.dot(np.linalg.pinv(Xs),y)
+        r = y - np.dot(X,theta_S)
+        i = i + 1
+    
+    return theta_S,S
+            
+
+stepforward(X,y,3)
+            
+        
